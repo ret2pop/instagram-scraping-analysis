@@ -10,6 +10,9 @@ import re
 import collections
 import sys
 
+from selenium.webdriver.common.by import By
+
+
 class Bot:
     def setUp(self):
         """Start web driver"""
@@ -34,22 +37,23 @@ class Bot:
             self.fail(ex.msg)
 
     def login(self, username, password):
-        self.driver.find_element_by_xpath("//input[@name='username']").send_keys(username)
-        self.driver.find_element_by_xpath("//input[@name='password']").send_keys(password)
+        self.driver.find_element(By.XPATH, "//*[@id='loginForm']/div/div[1]/div/label/input").send_keys(username)
+        self.driver.find_element(By.XPATH, "//*[@id='loginForm']/div/div[2]/div/label/input").send_keys(password)
         time.sleep(2)
-        self.driver.find_element_by_xpath("//button[contains(.,'Log In')]").click()
-        time.sleep(3)
-        self.driver.find_element_by_xpath("//button[contains(.,'Not Now')]").click()
-        notNow = self.driver.find_element_by_class_name("HoLwm")
-        time.sleep(3)
-        notNow.click()
-        time.sleep(5)
+        self.driver.find_element(By.XPATH, "//*[@id='loginForm']/div/div[3]/button").click()
+        time.sleep(10)
+        input("Enter any key after login")
+        # self.driver.find_element(By.XPATH, "//*[@id='mount_0_0_iZ']/div/div/div/div[1]/div/div/div/div[1]/div[
+        # 1]/div[2]/section/main/div/div/div/div/button").click() time.sleep(3) self.driver.find_element(By.XPATH,
+        # "//*[@id='mount_0_0_0R']/div/div/div/div[2]/div/div/div[1]/div/div[" "2]/div/div/div/div/div[
+        # 2]/div/div/div[3]/button[2]").click() time.sleep(3) notNow = self.driver.find_element(By.XPATH,
+        # "HoLwm") time.sleep(3) notNow.click() time.sleep(5)
 
     def get_my_followers(self, username):
         self.go_to_page("https://instagram.com/" + username + "/")
         time.sleep(5)
         my_followers_set = set()
-        followers = self.driver.find_elements_by_class_name("-nal3")
+        followers = self.driver.find_elements(By.CLASS_NAME, "-nal3")
         followers[1].click()
         time.sleep(2)
         initialise_vars = 'elem = document.getElementsByClassName("isgrP")[0]; followers = parseInt(document.getElementsByClassName("g47SY")[1].innerText); times = parseInt(followers * 0.14); followersInView1 = document.getElementsByClassName("FPmhX").length'
@@ -69,15 +73,15 @@ class Bot:
 
             next = True
             while(next):
-                n_li_1 = len(self.driver.find_elements_by_class_name("FPmhX"))
+                n_li_1 = len(self.driver.find_elements(By.CLASS_NAME, "FPmhX"))
                 self.driver.execute_script(next_scroll)
                 time.sleep(1.5)
-                n_li_2 = len(self.driver.find_elements_by_class_name("FPmhX"))
-                if(n_li_1 != n_li_2):
-                    following = self.driver.find_elements_by_xpath("//*[contains(text(), 'Following')]")
+                n_li_2 = len(self.driver.find_elements(By.CLASS_NAME, "FPmhX"))
+                if n_li_1 != n_li_2:
+                    following = self.driver.find_elements(By.XPATH, "//*[contains(text(), 'Following')]")
                     for follow in following:
-                        el = follow.find_element_by_xpath('../..')
-                        el = el.find_element_by_tag_name('a')
+                        el = follow.find_elements(By.XPATH, '../..')
+                        el = el.find_elements(By.TAG_NAME, 'a')
                         profile = el.get_attribute('href')
                         my_followers_set.add(profile)
                 else:

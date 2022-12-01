@@ -8,12 +8,13 @@ def generate_my_followers_txt(my_followers):
         my_followers_txt.write(follower + "\n")
 
 
-def get_my_followers(config):
-    username = config.username
-    password = config.password
-    b = Bot()
+def get_my_followers(args):
+    username = args.username
+    password = args.password
 
+    b = Bot()
     b.setUp()
+
     b.go_to_page("https://www.instagram.com/accounts/login/")
     b.login(username, password)
 

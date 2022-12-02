@@ -1,4 +1,5 @@
-import community as community
+# import community as community
+from community import community_louvain as community
 import json
 from helper_functions import *
 import pprint

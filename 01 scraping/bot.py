@@ -53,7 +53,8 @@ class Bot:
         self.go_to_page("https://instagram.com/" + username + "/")
         time.sleep(5)
         my_followers_set = set()
-        followers = self.driver.find_elements(By.CLASS_NAME, "-nal3")
+        followers = self.driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div/div[1]/div/div/div/div[1]/div[1]/div[2]/section/main/div/header/section/div[3]/div/div/a').click()
+
         followers[1].click()
         time.sleep(2)
         initialise_vars = 'elem = document.getElementsByClassName("isgrP")[0]; followers = parseInt(document.getElementsByClassName("g47SY")[1].innerText); times = parseInt(followers * 0.14); followersInView1 = document.getElementsByClassName("FPmhX").length'

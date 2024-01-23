@@ -22,7 +22,7 @@ class Bot:
         chrome_options.add_argument('--disable-gpu')
         chrome_options.add_argument("--lang=en")
         self.times_restarted = 0  # keep track of how many times profile page has to be refreshed
-        self.driver = webdriver.Chrome(chrome_options=chrome_options)
+        self.driver = webdriver.Chrome(options=chrome_options)
         self.driver.implicitly_wait(20)
 
     def tear_down(self):
@@ -104,7 +104,7 @@ class Bot:
             with open('start_profile.txt', 'w+') as outfile: # keep track of last profile checked
                 outfile.write(str(count_my_followers))
 
-            followers = self.driver.find_elements_by_class_name("-nal3")
+            followers = self.driver.find_elements(By.CLASS_NAME, "-nal3")
             followers[2].click()
             time.sleep(2)
             initialise_vars = 'elem = document.getElementsByClassName("isgrP")[0]; followers = parseInt(document.getElementsByClassName("g47SY")[1].innerText); times = parseInt(followers * 0.14); followersInView1 = document.getElementsByClassName("FPmhX").length'
@@ -125,7 +125,7 @@ class Bot:
                 next = True
                 follow_set = set()
                 # check how many people this person follows
-                nr_following = int(re.sub(",","",self.driver.find_elements_by_class_name("g47SY")[2].text))
+                nr_following = int(re.sub(",","",self.driver.find_elements(By.CLASS_NAME, "g47SY")[2].text))
 
                 n_li = 1
                 while next:
@@ -136,7 +136,7 @@ class Bot:
                     if not (n_li < nr_following - 11):
                         next = False
 
-                    n_li = len(self.driver.find_elements_by_class_name("FPmhX"))
+                    n_li = len(self.driver.find_elements(By.CLASS_NAME, "FPmhX"))
                     last_5_following.appendleft(n_li)
                     last_5_following.pop()
                     # if instagram starts blocking requests, reload page and start again
@@ -151,7 +151,7 @@ class Bot:
 
                 self.times_restarted = 0
 
-                following = self.driver.find_elements_by_class_name("FPmhX")
+                following = self.driver.find_elements(By.CLASS_NAME, "FPmhX")
                 for follow in following:
                     profile = follow.get_attribute('href')
                     if profile in my_followers_arr:
